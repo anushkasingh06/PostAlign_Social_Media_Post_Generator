@@ -1,49 +1,62 @@
-# PostAlign - AI-Driven Social Media Post Generator
+# PostAlign - AI-Driven Social Media Content Generator
 
 ## Introduction
 
-PostAlign is a Streamlit application for generating LinkedIn-style posts from a selected topic. A user can choose a topic from the available trending headlines, enter a topic manually, or select one of the tags extracted from example posts. The generated text can be tailored by length, language, and tone.
+PostAlign is an AI-driven social media content generation application designed to help users create engaging, customized posts with minimal effort. The application uses Large Language Models (LLMs) to generate content based on user-selected topics, post length, language, and tone.
 
-The generation flow uses a language model through Groq and LangChain, while a small collection of example posts helps guide the style of the output.
+Built using Streamlit, PostAlign provides an interactive interface where users can choose trending topics, enter custom topics, or select from predefined content tags to generate personalized social media posts.
 
 ## Overview
 
-The application is organized into separate modules. `main.py` provides the Streamlit interface and collects the user's selections. `post_generator.py` builds a prompt using the requested topic, length, language, and tone, then sends it to the configured language model.
+The application is organized into separate Python modules. `main.py` provides the Streamlit interface and collects user preferences, while `post_generator.py` handles prompt construction and AI-powered content generation.
 
-The `FewShotPosts` class reads the processed post data and filters examples by tag, language, length, and tone. These examples are added to the prompt so the model has relevant writing samples to follow.
+The `FewShotPosts` component retrieves relevant examples from preprocessed post data. These examples are filtered according to the selected topic, language, length, and tone, and are incorporated into prompts to guide the generated content.
 
-The preprocessing module enriches raw post text with metadata such as line count, language, tags, and tone. It uses the language model to extract the metadata and to map similar tags to a smaller, more consistent set. Trending headlines are retrieved separately through NewsAPI.
+The preprocessing module enriches raw post data with metadata such as language, tags, tone, and post length. LangChain is used to structure the language-model workflow, while Groq provides access to the configured Llama model. NewsAPI is integrated to retrieve trending topics for content generation.
+
+## Website Preview
+
+### Homepage
+
+![PostAlign Homepage](PostAlign_Homepage.jpg)
+
+### Homepage with Trending Topics Sidebar
+
+![PostAlign Homepage with Trending Topics Sidebar](PostAlign_Homepage_Trending_Sidebar.jpg)
 
 ## Main Functionality
 
-- Choose a topic from current headlines, enter a custom topic, or select a prepared tag.
-- Generate short, medium, or long posts.
-- Select from the supported language options in the interface.
-- Choose a professional, casual, humorous, inspirational, or neutral tone.
-- Use filtered example posts as few-shot prompt context.
-- View trending headlines in the Streamlit sidebar.
+- Select trending topics retrieved through NewsAPI.
+- Enter custom topics manually or select from predefined tags.
+- Generate short, medium, and long social media posts.
+- Customize generated content using different tones, including Professional, Casual, Humorous, Inspirational, and Neutral.
+- Generate content in multiple supported languages.
+- Use few-shot learning with relevant example posts to guide content generation.
+- View trending headlines through an interactive sidebar.
 
 ## Implementation
 
-- **Language:** Python
-- **Interface:** Streamlit
-- **Language model integration:** Groq, LangChain
-- **Model configured in code:** Llama 3.1 8B Instant
-- **Data processing:** Pandas, JSON
-- **Headline retrieval:** NewsAPI
-- **Configuration:** Environment variables loaded through `python-dotenv`
+- **Programming Language:** Python
+- **Frontend:** Streamlit
+- **Language Model Integration:** Groq API, Llama 3.1 8B Instant
+- **Prompt Engineering:** LangChain, Few-Shot Prompting
+- **Data Processing:** Pandas, JSON
+- **Trending Topics:** NewsAPI
+- **Configuration Management:** Python Dotenv
 
-## Running the Application
+## Running the Project
 
-Install the packages listed in `requirements.txt`, configure the required API keys in a local environment file, and start the interface:
+Install the dependencies listed in `requirements.txt` and configure the required API keys in a `.env` file.
+
+Run the application using:
 
 ```bash
 pip install -r requirements.txt
 streamlit run main.py
 ```
 
-The application expects the processed post data at `data/processed_posts.json`. The preprocessing script can be run to create that file from the raw post data, provided the input file and API configuration are available.
+The application expects preprocessed post data at `data/processed_posts.json`. The preprocessing script can be executed to generate this file from the raw post dataset, provided the required input data and API configuration are available.
 
 ## Notes
 
-Generated posts depend on the language model response, prompt examples, and the quality of the selected topic. Review and edit generated content before publishing it.
+The quality and relevance of generated posts depend on the selected topic, example data, prompt configuration, and language-model responses. Generated content should be reviewed and edited before publishing.
