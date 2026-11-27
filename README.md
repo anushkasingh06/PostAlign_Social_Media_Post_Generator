@@ -1,70 +1,49 @@
-**PostAlign: AI-Driven Social Media Content Generator**
+# PostAlign - AI-Driven Social Media Post Generator
 
-**Overview**
+## Introduction
 
-PostAlign is an AI-driven social media content generation platform designed to help users create high-quality, engaging posts with minimal effort. The system leverages advanced natural language processing (NLP) models to generate refined posts based on various input features such as tone, language, post length, and trending topics. By automating content creation, PostAlign empowers individuals and businesses to optimize their social media presence efficiently.
+PostAlign is a Streamlit application for generating LinkedIn-style posts from a selected topic. A user can choose a topic from the available trending headlines, enter a topic manually, or select one of the tags extracted from example posts. The generated text can be tailored by length, language, and tone.
 
-PostAlign processes raw posts and enhances them by enriching content with structured attributes. Users can customize posts by selecting specific tones, languages, and styles to match their target audience and platform requirements.
+The generation flow uses a language model through Groq and LangChain, while a small collection of example posts helps guide the style of the output.
 
-**Features**
+## Overview
 
-**Data Preparation and Processing**
+The application is organized into separate modules. `main.py` provides the Streamlit interface and collects the user's selections. `post_generator.py` builds a prompt using the requested topic, length, language, and tone, then sends it to the configured language model.
 
-- Stores and processes posts in JSON format.
-- Applies preprocessing techniques to enhance raw posts.
-- Extracts and integrates features such as topic classification, post length categorization, and multilingual support.
+The `FewShotPosts` class reads the processed post data and filters examples by tag, language, length, and tone. These examples are added to the prompt so the model has relevant writing samples to follow.
 
-**AI-Driven Content Generation**
+The preprocessing module enriches raw post text with metadata such as line count, language, tags, and tone. It uses the language model to extract the metadata and to map similar tags to a smaller, more consistent set. Trending headlines are retrieved separately through NewsAPI.
 
-- Utilizes Llama 3.2 for AI-powered post refinement.
-- Supports multiple tones including Professional, Casual, Humorous, Inspirational, and Neutral.
-- Generates posts in multiple languages: English, Hindi, Hinglish, Spanish, French, Arabic, Urdu, Bengali, Portuguese, and Russian.
-- Adapts to trending topics for relevance and engagement.
+## Main Functionality
 
-**User Interface Development**
+- Choose a topic from current headlines, enter a custom topic, or select a prepared tag.
+- Generate short, medium, or long posts.
+- Select from the supported language options in the interface.
+- Choose a professional, casual, humorous, inspirational, or neutral tone.
+- Use filtered example posts as few-shot prompt context.
+- View trending headlines in the Streamlit sidebar.
 
-- Built using Streamlit for a simple and interactive web-based interface.
-- Allows users to input parameters and generate tailored posts instantly.
-- Provides real-time previews of AI-generated content.
+## Implementation
 
-**New Techniques Learned**
+- **Language:** Python
+- **Interface:** Streamlit
+- **Language model integration:** Groq, LangChain
+- **Model configured in code:** Llama 3.1 8B Instant
+- **Data processing:** Pandas, JSON
+- **Headline retrieval:** NewsAPI
+- **Configuration:** Environment variables loaded through `python-dotenv`
 
-- Implementing NLP techniques for text enhancement and tone adaptation.
-- Integrating Groq API, NewsAPI and LangChain for seamless AI-based content generation.
-- Developing a lightweight and responsive frontend using Streamlit.
+## Running the Application
 
-**Insights Generation**
+Install the packages listed in `requirements.txt`, configure the required API keys in a local environment file, and start the interface:
 
-- Enables users to compare different post tones and formats. Users can also customize post length (Short, Medium, Long) and select trending topics such as AI integration, remote work, digital transformation, DEI (Diversity, Equity, and Inclusion), sustainability, leadership, health, and global concerns for more tailored content.
-- Provides AI-suggested enhancements based on best-performing content strategies.
-- Assists in optimizing posts for social media engagement.
+```bash
+pip install -r requirements.txt
+streamlit run main.py
+```
 
-**How to Use**
+The application expects the processed post data at `data/processed_posts.json`. The preprocessing script can be run to create that file from the raw post data, provided the input file and API configuration are available.
 
-1. Clone the repository:
-   ```
-   git clone https://github.com/Prishatank0607/PostAlign
-   ```
-2. Navigate to the project directory:
-   ```
-   cd PostAlign
-   ```
-3. Install required dependencies:
-   ```
-   pip install -r requirements.txt
-   ```
-4. Run the application:
-   ```
-   streamlit run main.py
-   ```
-5. Interact with the system to generate AI-powered social media posts.
+## Notes
 
-**Dependencies**
-
-- Python libraries: pandas, NumPy, Streamlit
-- AI model: Llama 3.2 via Groq API and NewsAPI
-- Additional tools: LangChain for prompt processing
-
-**Dataset Source**
-The dataset consists of 60 manually created raw posts stored in JSON format, which are preprocessed and enriched before AI-based content generation.
-
+Generated posts depend on the language model response, prompt examples, and the quality of the selected topic. Review and edit generated content before publishing it.
